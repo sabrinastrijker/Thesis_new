@@ -54,7 +54,7 @@ def plot_new_strategy(R, M, new_dict, N, S):
     plt.gca().set_xticks([])
     plt.gca().set_yticks([])
    
-   # os.makedirs('visualisation_new_strategy', exist_ok=True)
+    os.makedirs('visualisation_new_strategy', exist_ok=True)
     plt.savefig(f'visualisation_new_strategy/M_is_{M}_R_is_{R}_N_is{N}_S_is_{S}.png')
     plt.close()
     return matrix

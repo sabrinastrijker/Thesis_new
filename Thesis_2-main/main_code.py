@@ -3,6 +3,7 @@ import csv
 import pandas as pd
 import random
 import numpy as np
+import os
 np.random.seed(1)
 
 from matrix_generator import generate_matrix # type: ignore
@@ -80,35 +81,54 @@ def combineer():
 
 
 
-def main():
+def run_simulation(a2=1, theta=1.2, sigma=0.5, mu=0.004, *,
+                   S=150, N=30, price_noise=1, output_csv=None):
+    """Run the simulation with the provided parameters and save to ``output_csv``.
+
+    Parameters
+    ----------
+    a2, theta, sigma, mu : float
+        Key model parameters.
+    S : int
+        Number of periods.
+    N : int
+        Number of simulations.
+    price_noise : float
+        Noise factor added to the price estimation.
+    output_csv : str
+        Path of the CSV file to write results to. If ``None`` a file will be
+        created under ``results/Impact_of_price_noice``.
+    """
     print("hi")
 
-    """ Step 0: get all information you need """
-    # S is de tijd (aantal perioden) i will run the simulation?
-    S = 150
-    # n = number of simulations i run
-    N = 30
-
-    a2 = 1 # 1 normal value
-    theta = 1.2 #1.2 normal value
-    sigma = 0.5 # notmal is 0.5
-    mu = 0.004 # normal is 0.004
-    memory = 20 # normal = 20
-    price_noice_for_person = 1 
+    memory = 20  # normal = 20
 
     print(f"a2 = {a2}")
     print(f"theta = {theta}")
     print(f"sigma = {sigma}")
     print(f"mu is {mu}")
     print(f"memory is {memory}")
-    print(f"price noice = {price_noice_for_person}")
-    
+    print(f"price noice = {price_noise}")
 
-    fieldnames = ['simulation','period', 'agent_id', 'supervisor_number', 'share_demand', 
-                  'realized_profit', 'strategy', 'weight_influencer', 'weight_neighbors', 
+    fieldnames = ['simulation','period', 'agent_id', 'supervisor_number', 'share_demand',
+                  'realized_profit', 'strategy', 'weight_influencer', 'weight_neighbors',
                   'weight_self', 'supervisor_price', 'est_fundamental_value', 'price','strategy_history',
                         'supervisor_numer_history', 'personal_noice_for_fundamental_value']
+
+    os.makedirs('results/Impact_of_price_noice', exist_ok=True)
+<<<<<<< ours
+
     with open(f'results/Impact_of_price_noice/price_noice_is_{price_noice_for_person}.csv', 'w', newline='') as csvfile:
+=======
+    if output_csv is None:
+        output_csv = (
+            f"results/Impact_of_price_noice/"
+            f"price_noice_is_{price_noise}_a2_{a2}_theta_{theta}_sigma_{sigma}_mu_{mu}.csv"
+        )
+    os.makedirs(os.path.dirname(output_csv), exist_ok=True)
+
+    with open(output_csv, 'w', newline='') as csvfile:
+>>>>>>> theirs
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -405,7 +425,7 @@ def main():
                         
         # Save to CSV at the end
         # fieldnames = ['simulation','period', 'agent_id', 'supervisor_number', 'share_demand', 'realized_profit', 'strategy', 'weight_influencer', 'weight_neighbors', 'weight_self', 'supervisor_price ]
-        with open(f'results/Impact_of_price_noice/price_noice_is_{price_noice_for_person}.csv', 'a', newline='') as csvfile:
+        with open(output_csv, 'a', newline='') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             #   writer.writeheader()
             writer.writerows(history)
@@ -413,4 +433,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_simulation()
